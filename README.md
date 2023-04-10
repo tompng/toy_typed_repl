@@ -1,4 +1,4 @@
-# Toy Completion REPL
+# Toy Typed REPL
 
 Example of adding method chain autocompletion to IRB.
 
