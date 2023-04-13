@@ -15,9 +15,7 @@ module ToyCompletion
         closing_tokens << '}'
       when :on_lbracket
         closing_tokens << ']'
-      when :on_tstring_beg
-        closing_tokens << tok
-      when :on_rparen, :on_rbrace, :on_rbracket, :on_tstring_end
+      when :on_rparen, :on_rbrace, :on_rbracket
         closing_tokens.pop
       when :on_kw
         case tok
