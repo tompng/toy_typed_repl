@@ -131,7 +131,7 @@ end
 def (IRB::InputCompletor::CompletionProc).call(target, preposing, postposing)
   bind = IRB.conf[:MAIN_CONTEXT].workspace.binding
   lvars_code = [bind.local_variables, 'nil'].join('=')
-  incomplete_code = lvars_code + ";\n" + target + preposing
+  incomplete_code = lvars_code + ";\n" + preposing + target
   /(?<prefix>.*\.)?(?<method_name>[^.]*)$/ =~ target
   klasses = ToyCompletion.completion_classes(incomplete_code, bind)
   candidates = klasses.flat_map(&:instance_methods).uniq.select do |name|
