@@ -128,7 +128,7 @@ module ToyCompletion
   end
 end
 
-IRB::InputCompletor::CompletionProc.define_singleton_method :call do |target, preposing, postposing|
+def (IRB::InputCompletor::CompletionProc).call(target, preposing, postposing)
   bind = IRB.conf[:MAIN_CONTEXT].workspace.binding
   lvars_code = [bind.local_variables, 'nil'].join('=')
   incomplete_code = lvars_code + ";\n" + target + preposing
@@ -138,8 +138,7 @@ IRB::InputCompletor::CompletionProc.define_singleton_method :call do |target, pr
     name.start_with? method_name
   end
   candidates.map { "#{prefix}#{_1}" }
-rescue => e
-  $error = e
+rescue
   []
 end
 
