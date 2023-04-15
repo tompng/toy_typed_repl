@@ -38,7 +38,7 @@ module ToyCompletion
     return [] unless exp
     receiver = find_method_call_receiver(exp, pos)
     return [] unless receiver
-    evaluate_by_rbs_type(receiver, [class_of(binding.eval('self'))], binding)
+    evaluate_by_rbs_type(receiver, [binding.eval('self').class], binding)
   end
 
   def self.find_method_call_receiver(exp, pos)
@@ -52,16 +52,12 @@ module ToyCompletion
     nil
   end
 
-  def self.class_of(object)
-    object.singleton_class rescue object.class
-  end
-
   def self.evaluate_by_rbs_type(exp, self_klasses, binding)
     case exp
     in [:var_ref, [:@ident, name,]]
-      [(class_of binding.local_variable_get(name) rescue Object)]
+      [(binding.local_variable_get(name).class rescue Object)]
     in [:var_ref, [:@const, name,]]
-      [(class_of Object.const_get(name) rescue Object)]
+      [(Object.const_get(name).class rescue Object)]
     in [:vcall | :fcall, [:@ident, method,]]
       method_response_types self_klasses, method.to_sym
     in [:call, receiver, _, [:@ident, method,]]
