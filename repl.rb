@@ -31,22 +31,22 @@ module ToyCompletion
     Ripper.sexp(incomplete_code + "dummy_method_name\n" + closing_tokens.reverse.join("\n"))
   end
 
-  def self.completion_classes(incomplete_code, binding)
+  def self.completion_receiver_types(incomplete_code, binding)
     lines = incomplete_code.lines
     pos = [lines.size, lines.last[/.*\./]&.bytesize]
     exp = sexp_of(incomplete_code)
     return [] unless exp
-    receiver = find_method_call_receiver(exp, pos)
+    receiver = find_method_call_receiver_node(exp, pos)
     return [] unless receiver
     evaluate_by_rbs_type(receiver, [binding.eval('self').class], binding)
   end
 
-  def self.find_method_call_receiver(exp, pos)
+  def self.find_method_call_receiver_node(exp, pos)
     if exp in [:call, receiver, [:@period, '.', ], [:@ident, _, ^pos]]
       return receiver
     end
     exp.grep(Array).each do |a|
-      res = find_method_call_receiver a, pos
+      res = find_method_call_receiver_node a, pos
       return res if res
     end
     nil
@@ -129,7 +129,7 @@ def (IRB::InputCompletor::CompletionProc).call(target, preposing, postposing)
   lvars_code = [bind.local_variables, 'nil'].join('=')
   incomplete_code = lvars_code + ";\n" + preposing + target
   /(?<prefix>.*\.)?(?<method_name>[^.]*)$/ =~ target
-  klasses = ToyCompletion.completion_classes(incomplete_code, bind)
+  klasses = ToyCompletion.completion_receiver_types(incomplete_code, bind)
   candidates = klasses.flat_map(&:instance_methods).uniq.select do |name|
     name.start_with? method_name
   end
