@@ -100,6 +100,10 @@ module ToyCompletion
           klass
         when RBS::Types::ClassInstance
           Object.const_get(return_type.name.name) rescue nil
+        when RBS::Types::Tuple
+          Array
+        when RBS::Types::Record
+          Hash
         end
       end
     end.uniq
