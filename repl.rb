@@ -106,9 +106,13 @@ module ToyCompletion
   end
 
   def self.rbs_builder
-    @rbs_builder ||= RBS::DefinitionBuilder.new(
-      env: RBS::Environment.from_loader(RBS::CLI::LibraryOptions.new.loader).resolve_type_names
-    )
+    @rbs_builder ||= load_rbs_builder
+  end
+
+  def self.load_rbs_builder
+    loader = RBS::EnvironmentLoader.new
+    loader.add(path: Pathname('sig'))
+    RBS::DefinitionBuilder.new(env: RBS::Environment.from_loader(loader).resolve_type_names)
   end
 
   def self.rbs_search_method(klass, method_name, singleton)
