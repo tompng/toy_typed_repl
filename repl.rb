@@ -1,6 +1,5 @@
 require 'irb'
 require 'rbs'
-require 'rbs/cli'
 require 'ripper'
 
 module ToyCompletion
@@ -91,7 +90,7 @@ module ToyCompletion
 
   def self.method_response_types(klasses, name)
     klasses.flat_map do |klass|
-      method = rbs_search_method(klass, name, false)
+      method = rbs_search_method(klass, name)
       next [] unless method
       method.method_types.filter_map do |type|
         return_type = type.type.return_type
@@ -119,13 +118,13 @@ module ToyCompletion
     RBS::DefinitionBuilder.new(env: RBS::Environment.from_loader(loader).resolve_type_names)
   end
 
-  def self.rbs_search_method(klass, method_name, singleton)
+  def self.rbs_search_method(klass, method_name)
     klass.ancestors.each do |ancestor|
       name = ancestor.name
       next unless name
       type_name = RBS::TypeName(name).absolute!
-      definition = (singleton ? rbs_builder.build_singleton(type_name) : rbs_builder.build_instance(type_name)) rescue nil
-      method = definition&.methods&.[](method_name)
+      definition = rbs_builder.build_instance(type_name) rescue nil
+      method = definition.methods[method_name] if definition
       return method if method
     end
     nil
