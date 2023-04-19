@@ -6,7 +6,7 @@ module ToyCompletion
   def self.sexp_of(incomplete_code)
     tokens = Ripper.lex incomplete_code
     closing_tokens = []
-    tokens.filter_map do |_pos, event, tok, state|
+    tokens.each do |_pos, event, tok, state|
       case event
       when :on_lparen
         closing_tokens << ')'
