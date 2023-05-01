@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/ruby/reline.git
+  revision: 6cee9fa09d27e22ea46b841bf852bb55bcf507bf
+  specs:
+    reline (0.3.3)
+      io-console (~> 0.5)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -5,8 +12,6 @@ GEM
     irb (1.6.3)
       reline (>= 0.3.0)
     rbs (3.0.4)
-    reline (0.3.3)
-      io-console (~> 0.5)
 
 PLATFORMS
   x86_64-darwin-20
@@ -14,6 +19,7 @@ PLATFORMS
 DEPENDENCIES
   irb
   rbs
+  reline!
 
 BUNDLED WITH
-   2.5.0.dev
+   2.4.12
