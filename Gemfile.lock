@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/ruby/reline.git
-  revision: 6cee9fa09d27e22ea46b841bf852bb55bcf507bf
+  revision: bc0e3d13103223e8247528b1d605fbae36bbcb94
   specs:
     reline (0.3.3)
       io-console (~> 0.5)
